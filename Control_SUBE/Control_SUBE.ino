@@ -14,11 +14,13 @@
 //#include <avr/pgmspace.h>  //para que se usa?
 #include <string.h>
 //------------------------------------------------base de datos define----------
-#include <Arduino.h> //remplaza a wprogram.h
+// #include <Arduino.h> //remplaza a wprogram.h
 #include <EEPROM.h> //Libreria para manejo de la EEPROM
-#include "DB.h"  //libreria para manejo de base de datos en EEPROM
+//#include "DB.h"  //libreria para manejo de base de datos en EEPROM
 #include <TimerOne.h> //Libreria para manejo de interrupciones
 //DB db;
+
+#include "InterrupLED.h"
 
 #define MY_TBL 1
 
@@ -32,13 +34,13 @@
 void Agregar(byte *, uint16_t *);
 void BorrarUno(int DniBorrar);    //Prototipo de la funcion BorrarUno hecha para borrar un registro a partir del DNI
 /**/
-struct SUBEReg {
+/*struct SUBEReg {
   uint16_t DNI;
   byte ID[1][4];
-} subereg;
+} subereg;*/
 DB db; // crea la base de datos de clase EEPROM DB
 ///---------------------------------------------fin base de datos----
-#define Tiraled 4 // define que el led estara en el pin 4
+//#define Tiraled 4 // define que el led estara en el pin 4
 #define buzzer 3
 
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };   //physical mac address
@@ -68,7 +70,7 @@ String readString;
 #define RST 9
 #define ledPinAbierto    5
 #define ledPinCerrado 6
-#define TARJETA 1
+//#define TARJETA 1
 #define LLAVE 1
 
 #define MAX_LEN 256
@@ -138,6 +140,7 @@ void setup() {
 //byte Autorizado[TARJETA][4] = {{0xD7, 0xE9, 0x7E, 0xB5, }};
 // CLAVE DEL LLAVERO
 //byte Autorizado2[LLAVE][4] = {{0x83, 0x10, 0xF6, 0xE2, }};
+
 void imprimeClave(byte *serial);
 boolean esIgual(byte *key, byte *serial);
 boolean chekaKey(byte *serial);
@@ -377,98 +380,4 @@ void loop() {
   delay(500);
 
   //-------------------------------------------------------RFID Fin Loop------------
-}
-boolean esIgual(byte *key, byte *serial) {
-  for (int i = 0; i < 4; i++) {
-    if (key[i] != serial[i]) {
-      return false;
-    }
-  }
-  return true;
-}
-
-boolean chekaKey(byte *serial) {
-  for (int registro = 1; registro <= db.nRecs(); registro++)
-  {
-    db.read(registro, DB_REC subereg);
-    for (byte i = 0; i < TARJETA; i++)
-    {
-      if (esIgual(serial, subereg.ID[i]))
-        return true;
-    }
-    return false;
-  }
-}
-
-void imprimeClave(byte *serial) {
-  Serial.print(F("CLAVE: "));
-  for (int i = 0; i < 4; i++) {
-    Serial.print(serial[i], HEX);
-    Serial.print(" ");
-  }
-}
-
-void Agregar(byte *serial, uint16_t *DNI) {  /*Recibe el serial(el codigo), y el DNI*/
-  Serial.println(F("Agregando a la base de datos tarjeta ;"));
-  imprimeClave(serial);
-  memcpy(subereg.ID[0], serial, 4);
-  subereg.DNI = *DNI;
-  db.append(DB_REC subereg);
-}
-
-int conversion(char *s) { //transforma los strings convertidos del string recibido por servidor, en hexadecimal
-  int x = 0;
-  for (;;) {
-    char c = *s;
-    if (c >= '0' && c <= '9') {
-      x *= 16;
-      x += c - '0';
-    } else if (c >= 'A' && c <= 'F') {
-      x *= 16;
-      x += (c - 'A') + 10;
-    }
-    else break;
-    s++;
-  }
-  return x;
-}
-
-void BorrarUno(int DniBorrar) {
-  bool borra = false; //variable booleana que confirma si el registro fue borrado
-  for (int registro = 1; registro <= db.nRecs(); registro++)
-  { // recorre cada registro de la base de datos, comparando el Dni de cada registro con el Dni enviado por
-    db.read(registro, DB_REC subereg);
-    if (subereg.DNI == DniBorrar) {  // Compara si el Dni del registro X es igual que el Dni enviado por el servidor para borrar
-      db.deleteRec(registro);
-      borra = true;
-      break;   //para salir del bucle for una vez que encuentre por lo menos un Dni igual a DniBorrar
-    }
-  }
-  if (!borra) {   //Si la variable borrar es 0 o Falso, entonces salta un mensaje de error
-    Serial.print("Error, el Dni ");
-    Serial.print(DniBorrar);
-    Serial.println(" no fue encontrado.");
-  } else {   //en cambio, si es 1 o True, saldra un mensaje diciendo que fue borrado
-    Serial.println("El Dni fue borrado.");
-  }
-}
-
-void borrarEeprom() {
-  int registro = 0;
-  while (db.nRecs() != 0)
-  { // recorre cada registro de la base de datos de forma descendente, para que no trabaje el bucle interno de deleteRec
-    db.read(registro, DB_REC subereg);
-    db.deleteRec(registro);
-    registro++;
-  }
-  Serial.println("Base de Datos Borrada totalmente.");
-}
-
-void Interrup() {
-  for (short i = 0; i < 20; i++) { // 20 es el numero de veces en que Tiraled se prende y apaga
-    digitalWrite(Tiraled, HIGH);
-    delay(100);
-    digitalWrite(Tiraled, LOW);
-    delay(100);
-  }
 }
