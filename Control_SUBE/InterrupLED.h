@@ -39,6 +39,17 @@ struct SUBEReg {
 boolean agregar = false;
 //----------------------------------------------------------------//
 
+//------------------- Global variables declaration --------------- //
+
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };   //physical mac address
+byte ip[] = { 192, 168, 0, 6 };                      // ip in lan (that's what you need to use in your browser. ("192.168.1.178")
+byte gateway[] = { 192, 168, 0, 1 };                   // internet access via router
+byte subnet[] = { 255, 255, 255, 0 };                  //subnet mask
+EthernetServer server(80);                             //server port
+String readString;
+
+//------------------ End global variables declaration ------------- //
+
 void Interrup();
 
 void borrarEeprom();

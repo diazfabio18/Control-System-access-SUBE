@@ -19,12 +19,6 @@ DB db; // crea la base de datos de clase EEPROM DB
 ///---------------------------------------------fin base de datos----
 #define buzzer 3
 
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };   //physical mac address
-byte ip[] = { 192, 168, 0, 6 };                      // ip in lan (that's what you need to use in your browser. ("192.168.1.178")
-byte gateway[] = { 192, 168, 0, 1 };                   // internet access via router
-byte subnet[] = { 255, 255, 255, 0 };                  //subnet mask
-EthernetServer server(80);                             //server port
-String readString;
 
 //------------------------------------------- RFID --- INICIO definiciones Globales-----------------------------------
 MFRC522 nfc(SAD, RST);
