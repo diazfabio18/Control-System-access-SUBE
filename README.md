@@ -1,11 +1,11 @@
 # Control System access SUBE
-#### Control System for access to different places, using the unique identificator of each SUBE target and Arduino software.
+#### Control System for access to different places, using the unique identificator of each SUBE card and Arduino software.
 
 ![tarjeta SUBE](/img/sube-tarjeta.jpeg)
 
  Description
  ===============
- The system of argentinien transport utilies the SUBE target for each people. Therefore, each people have an unique identificator can use in a registry for differets actions. In this case, we used like access control. 
+ The system of argentinien transport utilies the SUBE card for each people. Therefore, each people have an unique identificator can use in a registry for differets actions. In this case, we used like access control. 
  
  This software have a database with CRUD operators (Create, Read, Update, Delete), so much of manual way like by a RFID lector.
 
@@ -26,6 +26,7 @@ Hardware and Software used
 #### Software
 - Language Arduino, based on __C__ __++__
 - Library Ethernet Shield
+- Library SPI, for __Server and Client connection __
 - Library MFRC522 for use RFID
 - Library DB for CRUD
 - Library TimerOne for Interruptions
