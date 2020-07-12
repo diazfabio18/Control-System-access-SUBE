@@ -7,6 +7,14 @@
     #include <Arduino.h> //remplaza a wprogram.h
   #endif
 
+  #ifndef SPI_H
+    #include <SPI.h>
+  #endif
+
+  #ifndef UIPEthernet_H
+    #include <UIPEthernet.h>
+  #endif
+
   #ifndef DB_H
     #include "DB.h"
   #endif
@@ -46,6 +54,8 @@ boolean chekaKey(byte *serial);
 boolean esIgual(byte *key, byte *serial);
 
 void Agregar(byte *serial, uint16_t *DNI);
+
+void htmlPage();
 
 // rfid
 

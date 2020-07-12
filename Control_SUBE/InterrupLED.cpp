@@ -106,3 +106,35 @@ void Agregar(byte *serial, uint16_t *DNI) {  /*Recibe el serial(el codigo), y el
 }
 
 /******************************/
+
+void htmlPage(){
+  client.println(F("HTTP/1.1 200 OK"));
+          client.println(F("Content-Type: text/html"));
+          client.println();
+          client.println(F("<HTML>"));
+          client.println(F("<HEAD>"));
+          client.println(F("<style type='text/css'> h1 { color: green;  font-family: Arial;   font-size: large;  } p { color: gray; font-family: Verdana; font-size: medium; } a { text-decoration:none; width:75px; height:50px; border-color:black; border-top:2px solid; border-bottom:2px solid; border-right:2px solid; border-left:2px solid; border-radius:10px 10px 10px; -o-border-radius:10px 10px 10px; -webkit-border-radius:10px 10px 10px; font-family:'Trebuchet MS',Arial, Helvetica, sans-serif; -moz-border-radius:10px 10px 10px; background-color:#293F5E; padding:8px; text-align:center; } a:link {color:white;} a:active {color:white;} a:hover {color:white;} a:visited {color:white;} </style>" ));
+          client.println(F("<TITLE>EEST 1</TITLE>")); //Nombre que aparece en la barra de título o pestaña del  navegador.
+          client.println(F("</HEAD>"));
+          client.println(F("<BODY>"));
+          client.println(F("<H1>EEST 1 \"Manuel Belgrano\"</H1>")); //Titulo de la página.
+          client.println(F("<HEAD>"));
+
+          client.println(F("<fieldset><legend>Agregado</legend><FORM METHOD=GET/ACTION=''> <div><label>DNI</label> <INPUT NAME='DNI' maxlength='4' placeholder='Ultimos 4 digitos'></div><BR> <div><label>TARJETA</label> <INPUT NAME='TRJ' maxlength='8' placeholder='Codigo a agregar'></div>  <BR> <div><INPUT class='btn' TYPE=SUBMIT value='Agregar'></div> </FORM></fieldset>"));
+          client.println(F("<fieldset><legend>Borrado</legend><FORM METHOD=GET/ACTION=''> <div><label>Dni a borrar</label> <INPUT NAME='BORRAR' maxlength='4' placeholder='Ultimos 4 digitos'></div> <BR> <div><INPUT class='btn' TYPE=SUBMIT VALUE='Borrar'></div> </FORM></fieldset>"));
+          client.println(F("<style type='text/css'>fieldset{float: left; width: 50%;} label {display: block;margin: .5em 0 0 0;}  div{ margin: .4em 0;} div label{width:25%; float:left;} btn {display: block;margin: 1em 0;} </style>"));
+
+          //client.println(F("<hr />"));
+          //client.println(F("<br />"));
+          //client.println(F("<br />"));
+          client.println(F("<br />"));
+
+          client.println(F("<center><H2> Tarjetas SUBE Autorizadas</H2></center>"));
+          
+          client.println(F("<table class='normal'  style='text-align:center; margin:0 auto; font-size:20px;' summary='Tabla generica'>"));
+          client.println(F("<tr><th scope='col'>  Registro  </th>"));
+          client.println(F("<th scope='col'>  Codigo de Tarjeta  </th>"));
+          client.println(F("<th scope='col'>  Dni  </th></tr>"));
+}
+
+/*********************************/
