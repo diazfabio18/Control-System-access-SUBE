@@ -1,8 +1,3 @@
-/*#include <deprecated.h>
-#include <MFRC522.h>
-#include <MFRC522Extended.h>
-#include <require_cpp11.h>
-*/
 /*
   Arduino with Ethernet Shield
 */
@@ -11,14 +6,11 @@
  #include "MFRC522.h"
 #define ENC28J60_CONTROL_CS 2 // Define que el Chip Select para la lan es pin 2
 #include <UIPEthernet.h>
-//#include <avr/pgmspace.h>  //para que se usa?
 #include <string.h>
+
 //------------------------------------------------base de datos define----------
-// #include <Arduino.h> //remplaza a wprogram.h
 #include <EEPROM.h> //Libreria para manejo de la EEPROM
-//#include "DB.h"  //libreria para manejo de base de datos en EEPROM
 #include <TimerOne.h> //Libreria para manejo de interrupciones
-//DB db;
 
 #include "InterrupLED.h"
 
@@ -30,17 +22,8 @@
 //  int temperature;
 //} myrec;
 
-/**/
-void Agregar(byte *, uint16_t *);
-void BorrarUno(int DniBorrar);    //Prototipo de la funcion BorrarUno hecha para borrar un registro a partir del DNI
-/**/
-/*struct SUBEReg {
-  uint16_t DNI;
-  byte ID[1][4];
-} subereg;*/
 DB db; // crea la base de datos de clase EEPROM DB
 ///---------------------------------------------fin base de datos----
-//#define Tiraled 4 // define que el led estara en el pin 4
 #define buzzer 3
 
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };   //physical mac address
@@ -49,28 +32,12 @@ byte gateway[] = { 192, 168, 0, 1 };                   // internet access via ro
 byte subnet[] = { 255, 255, 255, 0 };                  //subnet mask
 EthernetServer server(80);                             //server port
 String readString;
+
 //------------------------------------------- RFID --- INICIO definiciones Globales-----------------------------------
-//#define led 4 // define que el led estara en el pin 4
-
-/* Aignación de pines para la lectora de tarjetas.
-  Pins	SPI	   UNO
-  1 (NSS) SAD (SS)   10
-  2       SCK        13
-  3       MOSI       11
-  4       MISO       12
-  5       IRQ        *
-  6       GND       GND
-  7       RST        5
-  8      +3.3V (VCC) 3V3
-  Not needed
-  1 on ICPS header
-*/
-
 #define SAD 10
 #define RST 9
 #define ledPinAbierto    5
 #define ledPinCerrado 6
-//#define TARJETA 1
 #define LLAVE 1
 
 #define MAX_LEN 256
@@ -79,6 +46,8 @@ String readString;
 boolean agregar = false;
 MFRC522 nfc(SAD, RST);
 //--------------------------------------------RFID ---- FIN---------------------------------
+
+
 void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
@@ -123,16 +92,16 @@ void setup() {
   nfc.PCD_Init();
 
 
-  
-  byte version = nfc.getFirmwareVersion();
-  if (! version) {
+  /////////////////---------------------------
+  /////////////////--------------------------- byte version = nfc.getFirmwareVersion();
+/********************  if (! version) {
     Serial.print(F("NO SE ENCONTRO MFRC522 "));
     while (1); //halt
-  }
+  }  ***********************/
 
   Serial.print(F("BUSCANDO CHIP MFRC522 "));
   Serial.print(F("FIRMWARE VERSION. 0x"));
-  Serial.print(version, HEX);
+  //////////////////////////--------------------------- Serial.print(version, HEX);
   Serial.println(".");
 }
 
@@ -140,10 +109,10 @@ void setup() {
 //byte Autorizado[TARJETA][4] = {{0xD7, 0xE9, 0x7E, 0xB5, }};
 // CLAVE DEL LLAVERO
 //byte Autorizado2[LLAVE][4] = {{0x83, 0x10, 0xF6, 0xE2, }};
-
+/*
 void imprimeClave(byte *serial);
 boolean esIgual(byte *key, byte *serial);
-boolean chekaKey(byte *serial);
+boolean chekaKey(byte *serial);*/
 //-----------------------------------RFID fin de Setup------------------------------
 
 
@@ -276,28 +245,11 @@ void loop() {
   boolean Abierto = false;
   digitalWrite(ledPinAbierto, Abierto);
   //digitalWrite(ledPinCerrado, !Abierto);   /*led rojo prendido*/
-  status = nfc.requestTag(MF1_REQIDL, data);
+////////////////////////////////-----------------------------------  status = nfc.requestTag(MF1_REQIDL, data);
 
   bool sonido = true;
 
-  //--------------------------------------------------declaracion de variables necesarias para el efecto especial de Tiraled cada un minuto
-  //  digitalWrite(Tiraled,LOW);
-  //
-  //  unsigned long Millis_previo=0;
-  //  long tiempo=1000000;   //el tiempo que se quiere hacer el efecto especial es de 1 minuto.
-  //  unsigned long Millis_actual= millis();
-  //
-  //  if(Millis_actual - Millis_previo > tiempo) {
-  //    // guarda el ultimo tiempo, para la proxima vez
-  //    Millis_previo = Millis_actual;
-  //
-  //    for(short i=0;i<20;i++){ // 20 es el numero de veces en que Tiraled se prende y apaga
-  //      digitalWrite(Tiraled, HIGH);
-  //      delay(100);
-  //      digitalWrite(Tiraled, LOW);
-  //      delay(100);
-  //    }
-  //  }
+  
   digitalWrite(Tiraled, LOW); // aquí es donde la tira led prende y apaga permanentemente sin interrupciones
   delay(500);
   digitalWrite(Tiraled, HIGH);
@@ -305,7 +257,7 @@ void loop() {
 
   if (status == MI_OK) {
     Serial.println(F("se detecto una tarjeta"));
-    status = nfc.antiCollision(data);
+///////////////////------------------------------    status = nfc.antiCollision(data);
     memcpy(serial, data, 4);
     //Serial.println(db.nRecs());
 
@@ -370,7 +322,7 @@ void loop() {
         agregar = false;
       }
     }
-    nfc.haltTag(); // limpia registros de la lectora
+////////////////////////////---------------------------------    nfc.haltTag(); // limpia registros de la lectora
     digitalWrite(ledPinAbierto, Abierto); // enciende o apaga el led de abierto segun corresponda
     //digitalWrite(ledPinCerrado, !Abierto); // enciende o apaga el led de cerrado segun corresponda
     delay(1500); //espera 1 segundo y medio

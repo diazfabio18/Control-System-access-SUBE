@@ -33,3 +33,40 @@ boolean chekaKey(byte *serial);
 boolean esIgual(byte *key, byte *serial);
 
 void Agregar(byte *serial, uint16_t *DNI);
+
+// rfid
+
+/* Aignación de pines para la lectora de tarjetas.
+  Pins  SPI    UNO
+  1 (NSS) SAD (SS)   10
+  2       SCK        13
+  3       MOSI       11
+  4       MISO       12
+  5       IRQ        *
+  6       GND       GND
+  7       RST        5
+  8      +3.3V (VCC) 3V3
+  Not needed
+  1 on ICPS header
+*/
+
+//--------------------------------------------------declaracion de variables necesarias para el efecto especial de Tiraled cada un minuto
+  //  digitalWrite(Tiraled,LOW);
+  //
+  //  unsigned long Millis_previo=0;
+  //  long tiempo=1000000;   //el tiempo que se quiere hacer el efecto especial es de 1 minuto.
+  //  unsigned long Millis_actual= millis();
+  //
+  //  if(Millis_actual - Millis_previo > tiempo) {
+  //    // guarda el ultimo tiempo, para la proxima vez
+  //    Millis_previo = Millis_actual;
+  //
+  //    for(short i=0;i<20;i++){ // 20 es el numero de veces en que Tiraled se prende y apaga
+  //      digitalWrite(Tiraled, HIGH);
+  //      delay(100);
+  //      digitalWrite(Tiraled, LOW);
+  //      delay(100);
+  //    }
+  //  }
+
+  
