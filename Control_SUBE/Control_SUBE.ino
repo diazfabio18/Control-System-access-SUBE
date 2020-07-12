@@ -1,9 +1,8 @@
 /*
   Arduino with Ethernet Shield
 */
-
 #include <SPI.h>
- #include "MFRC522.h"
+#include "MFRC522.h"
 #define ENC28J60_CONTROL_CS 2 // Define que el Chip Select para la lan es pin 2
 #include <UIPEthernet.h>
 #include <string.h>
@@ -15,12 +14,6 @@
 #include "InterrupLED.h"
 
 #define MY_TBL 1
-
-//struct MyRec {
-//  char date[11];
-//  char time[9];
-//  int temperature;
-//} myrec;
 
 DB db; // crea la base de datos de clase EEPROM DB
 ///---------------------------------------------fin base de datos----
@@ -34,16 +27,6 @@ EthernetServer server(80);                             //server port
 String readString;
 
 //------------------------------------------- RFID --- INICIO definiciones Globales-----------------------------------
-#define SAD 10
-#define RST 9
-#define ledPinAbierto    5
-#define ledPinCerrado 6
-#define LLAVE 1
-
-#define MAX_LEN 256
-#define MI_OK true
-
-boolean agregar = false;
 MFRC522 nfc(SAD, RST);
 //--------------------------------------------RFID ---- FIN---------------------------------
 
@@ -57,10 +40,11 @@ void setup() {
   pinMode(Tiraled, OUTPUT);
   Timer1.initialize(30000000); //La libreía TimerOne crea automaticamente el objeto Timer1 sin necesidad de declararlo, y este es programado con un intervalo de 30 segundos(en micro segundos)
   Timer1.attachInterrupt(Interrup);
-  //---------------------------------------------DB------------------
 
+  //---------------------------------------------DB------------------
   db.open(MY_TBL);
 
+  //Check if database is empty
   if (db.nRecs() == 0)
   { // verifica si la base de datos esta vacia
     // crea una base de datos con la tarjeta maestra
@@ -73,13 +57,14 @@ void setup() {
     subereg.DNI = 1194;
     db.append(DB_REC subereg);
   };
-
   //---------------------------------------------DB Fin-------------------
+
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip, gateway, subnet);
   server.begin();
   //Serial.print("server is at ");
   Serial.println(Ethernet.localIP());
+  
   //---------------------------------------------- RFID inicio setup
   //Declaro los pines y el buzzer
   pinMode(buzzer, OUTPUT);
@@ -90,7 +75,6 @@ void setup() {
   
   //nfc.begin();
   nfc.PCD_Init();
-
 
   /////////////////---------------------------
   /////////////////--------------------------- byte version = nfc.getFirmwareVersion();
@@ -104,17 +88,7 @@ void setup() {
   //////////////////////////--------------------------- Serial.print(version, HEX);
   Serial.println(".");
 }
-
-//CLAVE DE LA TAJETA
-//byte Autorizado[TARJETA][4] = {{0xD7, 0xE9, 0x7E, 0xB5, }};
-// CLAVE DEL LLAVERO
-//byte Autorizado2[LLAVE][4] = {{0x83, 0x10, 0xF6, 0xE2, }};
-/*
-void imprimeClave(byte *serial);
-boolean esIgual(byte *key, byte *serial);
-boolean chekaKey(byte *serial);*/
 //-----------------------------------RFID fin de Setup------------------------------
-
 
 void loop() {
   // Create a client connection
@@ -129,7 +103,6 @@ void loop() {
           //store characters to string
           readString += c;
           //Serial.print(c);
-
         }
 
         //if HTTP request has ended
@@ -296,7 +269,6 @@ void loop() {
             tone(buzzer, 100, 50);
             delay(50);
             tone(buzzer, 660, 500); //emite sonido
-
 
           }
         }

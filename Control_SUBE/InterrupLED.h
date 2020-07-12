@@ -14,9 +14,22 @@
 #endif
 
 struct SUBEReg {
-  uint16_t DNI;
-  byte ID[1][4];
+  uint16_t DNI; //DNI de la persona
+  byte ID[1][4]; //Identificator of Sube target
 } subereg;
+
+//-------------------------DEFINES ----------------------------//
+#define SAD 10
+#define RST 9
+#define ledPinAbierto    5
+#define ledPinCerrado 6
+#define LLAVE 1
+
+#define MAX_LEN 256
+#define MI_OK true
+
+boolean agregar = false;
+//----------------------------------------------------------------//
 
 void Interrup();
 
@@ -69,4 +82,9 @@ void Agregar(byte *serial, uint16_t *DNI);
   //    }
   //  }
 
-  
+  //CLAVE DE LA TAJETA
+//byte Autorizado[TARJETA][4] = {{0xD7, 0xE9, 0x7E, 0xB5, }};
+// CLAVE DEL LLAVERO
+//byte Autorizado2[LLAVE][4] = {{0x83, 0x10, 0xF6, 0xE2, }};
+
+
